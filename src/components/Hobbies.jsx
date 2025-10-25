@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom';
 const Hobbies = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const location = useLocation();
 
   const hobbies = [
@@ -100,7 +102,7 @@ const Hobbies = () => {
   ];
 
   const categories = ['Arts', 'Music', 'Sports', 'Crafts', 'Language', 'Wellness'];
-  const backgrounds = ['#f8f9fa', '#ffe4e1', '#e6e6fa', '#f0e68c', '#dda0dd', '#98fb98'];
+  const backgrounds = ['#FF9843', '#FFDD95', '#86A7FC', '#3468C0' ];
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -118,6 +120,40 @@ const Hobbies = () => {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
+
+    if (term.length > 0) {
+      const suggestions = hobbies.filter(hobby =>
+        hobby.name.toLowerCase().startsWith(term) ||
+        hobby.description.toLowerCase().startsWith(term) ||
+        hobby.category.toLowerCase().startsWith(term)
+      ).slice(0, 5); // Limit to 5 suggestions
+      setFilteredSuggestions(suggestions);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setSearchTerm(suggestion.name.toLowerCase());
+    setShowSuggestions(false);
+  };
+
+  const handleInputFocus = () => {
+    if (searchTerm.length > 0) {
+      const suggestions = hobbies.filter(hobby =>
+        hobby.name.toLowerCase().startsWith(searchTerm) ||
+        hobby.description.toLowerCase().startsWith(searchTerm) ||
+        hobby.category.toLowerCase().startsWith(searchTerm)
+      ).slice(0, 5);
+      setFilteredSuggestions(suggestions);
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Delay hiding suggestions to allow click on suggestion
+    setTimeout(() => setShowSuggestions(false), 150);
   };
 
   const handleCategorySelect = (category) => {
@@ -145,8 +181,31 @@ const Hobbies = () => {
             className="search-input"
             value={searchTerm}
             onChange={handleSearch}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
           />
           <span className="search-icon">🔍</span>
+          {showSuggestions && (
+            <div className="suggestions-dropdown">
+              {filteredSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="suggestion-item"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  <strong>{suggestion.name}</strong> - <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCategorySelect(suggestion.category);
+                    }}
+                    style={{ cursor: 'pointer', color: '#FFA500' }}
+                  >
+                    {suggestion.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <div className="categories-container">

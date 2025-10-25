@@ -278,7 +278,7 @@ code {
 /* From Uiverse.io by alexruix - Adapted for Orange Theme */
 .card {
   width: 260px;
-  height: 220px;
+  height: 320px;
   border-radius: 20px;
   background: #ffffff;
   position: relative;
@@ -422,6 +422,36 @@ code {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   background-color: white;
   outline: none;
+  position: relative;
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestion-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f8f9fa;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
 }
 
 .hero-search .search-icon {
@@ -533,11 +563,11 @@ code {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #000;
 }
 
 .card-description {
-  color: #666;
+  color: #000;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   line-height: 1.4;
@@ -560,7 +590,7 @@ code {
 
 .rating-value {
   font-weight: bold;
-  color: #333;
+  color: #000;
 }
 
 .card-footer {
@@ -573,7 +603,7 @@ code {
 
 .card-price {
   font-weight: bold;
-  color: #333;
+  color: #000;
   font-size: 1.1rem;
 }
 
